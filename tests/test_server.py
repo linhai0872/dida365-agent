@@ -1,4 +1,4 @@
-from dida365_agent_mcp.server import _build_data
+from dida365_agent.server import _build_data
 
 
 def test_build_data_sort_order():

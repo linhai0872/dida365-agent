@@ -2,8 +2,8 @@ import httpx
 import pytest
 import respx
 
-from dida365_agent_mcp.client import Dida365Client
-from dida365_agent_mcp.models import Project, ProjectData, Task
+from dida365_agent.client import Dida365Client
+from dida365_agent.models import Project, ProjectData, Task
 
 BASE_URL_CHINA = "https://api.dida365.com/open/v1"
 BASE_URL_INTL = "https://api.ticktick.com/open/v1"
@@ -13,7 +13,7 @@ BASE_URL_INTL = "https://api.ticktick.com/open/v1"
 def client(monkeypatch):
     monkeypatch.setenv("DIDA365_ACCESS_TOKEN", "test-token")
     monkeypatch.setenv("DIDA365_REGION", "china")
-    from dida365_agent_mcp import config
+    from dida365_agent import config
 
     config.settings = config.Settings()
     return Dida365Client()
@@ -23,7 +23,7 @@ def client(monkeypatch):
 def client_intl(monkeypatch):
     monkeypatch.setenv("DIDA365_ACCESS_TOKEN", "test-token")
     monkeypatch.setenv("DIDA365_REGION", "international")
-    from dida365_agent_mcp import config
+    from dida365_agent import config
 
     config.settings = config.Settings()
     return Dida365Client()

@@ -8,9 +8,9 @@ Run: uv run python scripts/smoke_test.py
 import asyncio
 import sys
 
-from dida365_agent_mcp.client import Dida365Client
-from dida365_agent_mcp.client_v2 import Dida365V2Client, signon
-from dida365_agent_mcp.config import settings
+from dida365_agent.client import Dida365Client
+from dida365_agent.client_v2 import Dida365V2Client, signon
+from dida365_agent.config import settings
 
 PASS = "\033[32m✓\033[0m"
 FAIL = "\033[31m✗\033[0m"
@@ -163,7 +163,7 @@ async def test_v2(client: Dida365V2Client) -> None:
 
 async def main() -> None:
     print("=" * 50)
-    print("dida365-agent-mcp smoke test")
+    print("dida365-agent smoke test")
     print("=" * 50)
 
     # V1

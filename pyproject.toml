@@ -1,7 +1,7 @@
 [project]
-name = "dida365-agent-mcp"
-version = "2.0.1"
-description = "MCP server for AI Agents to manage Dida365 (TickTick) tasks and projects"
+name = "dida365-agent"
+version = "3.0.0"
+description = "CLI, Agent Skill, and MCP server for AI agents to manage Dida365 (TickTick) tasks and projects"
 readme = "README.md"
 authors = [
     { name = "linhai0872", email = "yuxii_2003@126.com" }
@@ -23,6 +23,7 @@ dependencies = [
     "pydantic>=2.0",
     "pydantic-settings>=2.0",
     "python-dotenv>=1.0",
+    "typer>=0.12",
 ]
 
 [project.urls]
@@ -31,8 +32,10 @@ Repository = "https://github.com/linhai0872/dida365-agent-mcp"
 "Bug Tracker" = "https://github.com/linhai0872/dida365-agent-mcp/issues"
 
 [project.scripts]
-dida365-mcp = "dida365_agent_mcp.server:main"
-dida365-oauth = "dida365_agent_mcp._oauth_flow:main"
+dida365-agent = "dida365_agent.cli:app"
+dida = "dida365_agent.cli:app"
+dida365-mcp = "dida365_agent.server:main"
+dida365-oauth = "dida365_agent._oauth_flow:main"
 
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]

@@ -10,8 +10,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from dida365_agent_mcp.auth import exchange_code_for_token, get_authorize_url
-from dida365_agent_mcp.config import settings
+from dida365_agent.auth import exchange_code_for_token, get_authorize_url
+from dida365_agent.config import settings
 
 _code: str | None = None
 _server: HTTPServer | None = None

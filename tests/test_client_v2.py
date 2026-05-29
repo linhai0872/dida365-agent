@@ -2,8 +2,8 @@ import httpx
 import pytest
 import respx
 
-from dida365_agent_mcp.client_v2 import Dida365V2Client, signon
-from dida365_agent_mcp.models import (
+from dida365_agent.client_v2 import Dida365V2Client, signon
+from dida365_agent.models import (
     Habit,
     HabitCheckin,
     HabitSection,

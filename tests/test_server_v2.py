@@ -1,11 +1,11 @@
 import pytest
 
-from dida365_agent_mcp.server_v2 import _handle_error, _to_json, init_v2_client
+from dida365_agent.server_v2 import _handle_error, _to_json, init_v2_client
 
 
 def test_to_json_list():
     # Arrange
-    from dida365_agent_mcp.models import Tag
+    from dida365_agent.models import Tag
 
     tags = [Tag(name="work", color="#FF0000")]
 
@@ -35,7 +35,7 @@ def test_to_json_dict():
 
 def test_to_json_model():
     # Arrange
-    from dida365_agent_mcp.models import ProjectGroup
+    from dida365_agent.models import ProjectGroup
 
     folder = ProjectGroup(id="g1", name="Personal")
 
@@ -75,8 +75,8 @@ def test_handle_error_generic():
 
 
 def test_init_v2_client():
-    from dida365_agent_mcp.client_v2 import Dida365V2Client
-    from dida365_agent_mcp.server_v2 import _get_v2_client
+    from dida365_agent.client_v2 import Dida365V2Client
+    from dida365_agent.server_v2 import _get_v2_client
 
     # Arrange
     client = Dida365V2Client(session_token="t", base_url="http://test")
@@ -89,7 +89,7 @@ def test_init_v2_client():
 
 
 def test_get_v2_client_not_initialized():
-    from dida365_agent_mcp.server_v2 import _get_v2_client
+    from dida365_agent.server_v2 import _get_v2_client
 
     # Arrange - reset
     init_v2_client(None)  # type: ignore[arg-type]

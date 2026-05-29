@@ -1,4 +1,4 @@
-from dida365_agent_mcp.config import Settings
+from dida365_agent.config import Settings
 
 
 def test_china_region_urls(monkeypatch):

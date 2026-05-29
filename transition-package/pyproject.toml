@@ -1,0 +1,32 @@
+[project]
+name = "dida365-agent-mcp"
+version = "3.0.0"
+description = "Renamed to dida365-agent. This package is a thin redirect that installs dida365-agent."
+readme = "README.md"
+authors = [
+    { name = "linhai0872", email = "yuxii_2003@126.com" }
+]
+license = "MIT"
+requires-python = ">=3.12"
+keywords = ["mcp", "dida365", "ticktick", "ai", "agent", "task-management"]
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "dida365-agent>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/linhai0872/dida365-agent"
+Repository = "https://github.com/linhai0872/dida365-agent"
+
+[build-system]
+requires = ["uv_build>=0.9.27,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "dida365_agent_mcp_transition"
