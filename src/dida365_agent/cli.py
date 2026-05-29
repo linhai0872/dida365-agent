@@ -29,6 +29,7 @@ project_app = typer.Typer(help="Project operations.", no_args_is_help=True)
 tag_app = typer.Typer(help="Tag operations (V2).", no_args_is_help=True)
 habit_app = typer.Typer(help="Habit operations (V2).", no_args_is_help=True)
 folder_app = typer.Typer(help="Project folder operations (V2).", no_args_is_help=True)
+column_app = typer.Typer(help="Kanban column operations (V2).", no_args_is_help=True)
 auth_app = typer.Typer(help="Authentication.", no_args_is_help=True)
 
 app.add_typer(task_app, name="task")
@@ -36,6 +37,7 @@ app.add_typer(project_app, name="project")
 app.add_typer(tag_app, name="tag")
 app.add_typer(habit_app, name="habit")
 app.add_typer(folder_app, name="folder")
+app.add_typer(column_app, name="column")
 app.add_typer(auth_app, name="auth")
 
 
@@ -43,6 +45,7 @@ app.add_typer(auth_app, name="auth")
 
 _FIELD_MAP = {
     "project_id": "projectId",
+    "column_id": "columnId",
     "start_date": "startDate",
     "due_date": "dueDate",
     "is_all_day": "isAllDay",
@@ -151,6 +154,7 @@ def _load_json_arg(json_str: str | None, file: Path | None) -> Any:
 def task_create(
     title: str = typer.Option(..., "--title"),
     project: str = typer.Option(..., "--project", help="Project ID"),
+    column_id: str | None = typer.Option(None, "--column-id", help="Kanban column ID"),
     content: str | None = typer.Option(None, "--content"),
     desc: str | None = typer.Option(None, "--desc"),
     start_date: str | None = typer.Option(None, "--start-date"),
@@ -168,6 +172,7 @@ def task_create(
     data = _build_data(
         title=title,
         project_id=project,
+        column_id=column_id,
         content=content,
         desc=desc,
         start_date=start_date,
@@ -188,6 +193,7 @@ def task_create(
 def task_update(
     task_id: str = typer.Argument(..., help="Task ID"),
     project: str = typer.Option(..., "--project", help="Project ID"),
+    column_id: str | None = typer.Option(None, "--column-id", help="Move to this Kanban column"),
     title: str | None = typer.Option(None, "--title"),
     content: str | None = typer.Option(None, "--content"),
     desc: str | None = typer.Option(None, "--desc"),
@@ -206,6 +212,7 @@ def task_update(
     data = _build_data(
         task_id=task_id,
         project_id=project,
+        column_id=column_id,
         title=title,
         content=content,
         desc=desc,
@@ -659,6 +666,52 @@ def folder_delete(folder_id: str = typer.Argument(..., help="Folder ID")) -> Non
     async def _do(c: Dida365V2Client) -> dict:
         await c.delete_folder(folder_id)
         return {"deleted": folder_id}
+
+    _run_v2(_do)
+
+
+# ── Column commands (Kanban) ──
+
+
+@column_app.command("list")
+def column_list(
+    project_id: str = typer.Argument(..., help="Project ID (must be a kanban-view project)"),
+) -> None:
+    """List a project's kanban columns (V2)."""
+    _run_v2(lambda c: c.list_columns(project_id))
+
+
+@column_app.command("create")
+def column_create(
+    project: str = typer.Option(..., "--project", help="Project ID"),
+    name: str = typer.Option(..., "--name", help="Column name, e.g. Backlog"),
+    sort_order: int | None = typer.Option(None, "--sort-order"),
+) -> None:
+    """Create a kanban column (V2)."""
+    _run_v2(lambda c: c.create_column(project, name, sort_order))
+
+
+@column_app.command("update")
+def column_update(
+    column_id: str = typer.Argument(..., help="Column ID"),
+    project: str = typer.Option(..., "--project", help="Project ID"),
+    name: str | None = typer.Option(None, "--name"),
+    sort_order: int | None = typer.Option(None, "--sort-order"),
+) -> None:
+    """Update a kanban column. Only provided fields change (V2)."""
+    _run_v2(lambda c: c.update_column(column_id, project, name, sort_order))
+
+
+@column_app.command("delete")
+def column_delete(
+    column_id: str = typer.Argument(..., help="Column ID"),
+    project: str = typer.Option(..., "--project", help="Project ID"),
+) -> None:
+    """Delete a kanban column (V2). Tasks in it are not deleted."""
+
+    async def _do(c: Dida365V2Client) -> dict:
+        await c.delete_column(column_id, project)
+        return {"deleted": column_id}
 
     _run_v2(_do)
 

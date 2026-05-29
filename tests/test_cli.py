@@ -82,6 +82,42 @@ def test_search(configured):
     assert json.loads(result.stdout)["tasks"][0]["id"] == "t1"
 
 
+@respx.mock
+def test_column_list(configured):
+    # Arrange
+    respx.get(f"{V2_BASE}/column/project/p1").mock(
+        return_value=httpx.Response(
+            200, json=[{"id": "c1", "projectId": "p1", "name": "Backlog"}]
+        )
+    )
+
+    # Act
+    result = runner.invoke(cli.app, ["column", "list", "p1"])
+
+    # Assert
+    assert result.exit_code == 0
+    assert json.loads(result.stdout)[0]["name"] == "Backlog"
+
+
+@respx.mock
+def test_column_create(configured):
+    # Arrange
+    route = respx.post(f"{V2_BASE}/column").mock(
+        return_value=httpx.Response(200, json={"id2etag": {"c1": "etag"}})
+    )
+
+    # Act
+    result = runner.invoke(
+        cli.app, ["column", "create", "--project", "p1", "--name", "Todo"]
+    )
+
+    # Assert
+    assert result.exit_code == 0
+    assert route.called
+    sent = json.loads(route.calls.last.request.content)
+    assert sent["add"][0] == {"projectId": "p1", "name": "Todo"}
+
+
 # ── Error path ──
 
 

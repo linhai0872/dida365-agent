@@ -9,6 +9,7 @@ from typing import Any
 import httpx
 
 from .models import (
+    Column,
     Habit,
     HabitCheckin,
     HabitSection,
@@ -235,3 +236,46 @@ class Dida365V2Client:
 
     async def delete_folder(self, folder_id: str) -> None:
         await self._request("DELETE", f"/projectGroup/{folder_id}")
+
+    # ── Columns (Kanban) ──
+
+    async def list_columns(self, project_id: str) -> list[Column]:
+        resp = await self._request("GET", f"/column/project/{project_id}")
+        return [Column.model_validate(c) for c in resp.json()]
+
+    async def batch_columns(
+        self,
+        add: list[dict[str, Any]] | None = None,
+        update: list[dict[str, Any]] | None = None,
+        delete: list[dict[str, Any]] | None = None,
+    ) -> dict:
+        data = {"add": add or [], "update": update or [], "delete": delete or []}
+        resp = await self._request("POST", "/column", json=data)
+        return resp.json()
+
+    async def create_column(
+        self, project_id: str, name: str, sort_order: int | None = None
+    ) -> dict:
+        column: dict[str, Any] = {"projectId": project_id, "name": name}
+        if sort_order is not None:
+            column["sortOrder"] = sort_order
+        return await self.batch_columns(add=[column])
+
+    async def update_column(
+        self,
+        column_id: str,
+        project_id: str,
+        name: str | None = None,
+        sort_order: int | None = None,
+    ) -> dict:
+        column: dict[str, Any] = {"id": column_id, "projectId": project_id}
+        if name is not None:
+            column["name"] = name
+        if sort_order is not None:
+            column["sortOrder"] = sort_order
+        return await self.batch_columns(update=[column])
+
+    async def delete_column(self, column_id: str, project_id: str) -> dict:
+        return await self.batch_columns(
+            delete=[{"columnId": column_id, "projectId": project_id}]
+        )

@@ -17,6 +17,7 @@ class ChecklistItem(BaseModel):
 class Task(BaseModel):
     id: str | None = None
     projectId: str | None = None
+    columnId: str | None = None
     title: str | None = None
     content: str | None = None
     desc: str | None = None
