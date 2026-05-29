@@ -1,6 +1,6 @@
 # MCP Server 集成
 
-除了 CLI 和 Skill，本项目同时是一个标准 MCP Server，可供 Claude Code、Cursor、Windsurf 等通过工具调用直接管理任务。共 40 个工具（19 个 V1 + 21 个 V2）。
+除了 CLI 和 Skill，本项目同时是一个标准 MCP Server，可供 Claude Code、Cursor、Windsurf 等通过工具调用直接管理任务。共 44 个工具（19 个 V1 + 25 个 V2）。
 
 先按 [配置说明](configuration.md) 准备好凭据并完成 OAuth 授权（`uvx dida365-agent dida auth login`）。
 

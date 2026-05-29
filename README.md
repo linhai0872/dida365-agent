@@ -74,7 +74,7 @@ The Skill recognizes intent, fills in missing details, and assembles `dida` comm
 
 ### Option 3: As an MCP Server
 
-Exposes 40 tools as a standard MCP Server for Claude Code, Cursor, Windsurf, etc. See [MCP Server integration](docs/mcp.md).
+Exposes 44 tools as a standard MCP Server for Claude Code, Cursor, Windsurf, etc. See [MCP Server integration](docs/mcp.md).
 
 ---
 

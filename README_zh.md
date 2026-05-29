@@ -74,7 +74,7 @@ Skill 会识别意图、补全缺失信息、自动组装 `dida` 命令执行，
 
 ### 方式三：作为 MCP Server
 
-作为标准 MCP Server 暴露 40 个工具，供 Claude Code、Cursor、Windsurf 等直连。详见 [MCP Server 集成](docs/mcp.md)。
+作为标准 MCP Server 暴露 44 个工具，供 Claude Code、Cursor、Windsurf 等直连。详见 [MCP Server 集成](docs/mcp.md)。
 
 ---
 

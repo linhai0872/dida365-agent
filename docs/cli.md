@@ -28,7 +28,7 @@ dida project delete <projectId>            # 永久删除清单及其所有任�
 
 ```bash
 dida task create --title "标题" --project <projectId> \
-  [--content --desc --start-date --due-date --priority 0|1|3|5 \
+  [--column-id <columnId> --content --desc --start-date --due-date --priority 0|1|3|5 \
    --tags 工作,紧急 --all-day --time-zone --reminders --repeat-flag --kind --sort-order]
 dida task update <taskId> --project <projectId> [同 create 的可选字段]
 dida task get <projectId> <taskId>         # 按清单+任务 ID 获取
@@ -93,6 +93,19 @@ dida folder create --name "个人" [--sort-order]
 dida folder update <folderId> [--name --sort-order]
 dida folder delete <folderId>
 ```
+
+## 看板列（V2）
+
+```bash
+dida column list <projectId>                       # 列出列（拿 columnId）
+dida column create --project <projectId> --name "Backlog" [--sort-order]
+dida column update <columnId> --project <projectId> [--name --sort-order]
+dida column delete <columnId> --project <projectId> # 列内任务不删
+```
+
+看板列需项目为看板视图：`dida project create --name X --view-mode kanban`，或
+`dida project update <id> --view-mode kanban`。移动卡片到某列用
+`dida task update <taskId> --project <pid> --column-id <columnId>`（走 V1）。
 
 ## 约定
 

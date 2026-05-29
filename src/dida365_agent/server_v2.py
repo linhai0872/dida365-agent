@@ -542,3 +542,106 @@ def register_v2_tools(mcp: FastMCP) -> None:
             return f"Folder {folder_id} deleted successfully."
         except Exception as e:
             return _handle_error(e, "delete_folder")
+
+    # ── Column Tools (Kanban) ──
+
+    @mcp.tool(
+        annotations={
+            "title": "List Columns (V2)",
+            "readOnlyHint": True,
+            "destructiveHint": False,
+            "idempotentHint": True,
+            "openWorldHint": True,
+        }
+    )
+    async def dida365_list_columns(project_id: str) -> str:
+        """List a project's kanban columns (project must be in kanban view).
+
+        Args:
+            project_id: The project ID.
+        """
+        try:
+            columns = await _get_v2_client().list_columns(project_id)
+            return _to_json(columns)
+        except Exception as e:
+            return _handle_error(e, "list_columns")
+
+    @mcp.tool(
+        annotations={
+            "title": "Create Column (V2)",
+            "readOnlyHint": False,
+            "destructiveHint": False,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        }
+    )
+    async def dida365_create_column(
+        project_id: str, name: str, sort_order: int | None = None,
+    ) -> str:
+        """Create a kanban column. Move tasks into it via update_task's columnId.
+
+        Args:
+            project_id: The project ID.
+            name: Column name, e.g. Backlog.
+            sort_order: Display order; lower values appear first.
+        """
+        try:
+            result = await _get_v2_client().create_column(
+                project_id, name, sort_order
+            )
+            return _to_json(result)
+        except Exception as e:
+            return _handle_error(e, "create_column")
+
+    @mcp.tool(
+        annotations={
+            "title": "Update Column (V2)",
+            "readOnlyHint": False,
+            "destructiveHint": False,
+            "idempotentHint": True,
+            "openWorldHint": True,
+        }
+    )
+    async def dida365_update_column(
+        column_id: str,
+        project_id: str,
+        name: str | None = None,
+        sort_order: int | None = None,
+    ) -> str:
+        """Update a kanban column. Only provided fields are changed.
+
+        Args:
+            column_id: The column ID.
+            project_id: The project the column belongs to.
+            name: New column name.
+            sort_order: New display order.
+        """
+        try:
+            result = await _get_v2_client().update_column(
+                column_id, project_id, name, sort_order
+            )
+            return _to_json(result)
+        except Exception as e:
+            return _handle_error(e, "update_column")
+
+    @mcp.tool(
+        annotations={
+            "title": "Delete Column (V2)",
+            "readOnlyHint": False,
+            "destructiveHint": True,
+            "idempotentHint": True,
+            "openWorldHint": True,
+        }
+    )
+    async def dida365_delete_column(column_id: str, project_id: str) -> str:
+        """Delete a kanban column. Tasks in it are not deleted.
+
+        Args:
+            column_id: The column ID.
+            project_id: The project the column belongs to.
+        """
+        try:
+            await _get_v2_client().delete_column(column_id, project_id)
+            return f"Column {column_id} deleted successfully."
+        except Exception as e:
+            return _handle_error(e, "delete_column")

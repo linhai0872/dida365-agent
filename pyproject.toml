@@ -1,6 +1,6 @@
 [project]
 name = "dida365-agent"
-version = "3.0.0"
+version = "3.1.0"
 description = "CLI, Agent Skill, and MCP server for AI agents to manage Dida365 (TickTick) tasks and projects"
 readme = "README.md"
 authors = [
@@ -52,6 +52,7 @@ dev = [
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
+testpaths = ["tests"]
 
 [tool.ruff]
 target-version = "py312"

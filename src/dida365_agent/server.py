@@ -128,6 +128,7 @@ def _handle_error(e: Exception, operation: str = "") -> str:
 def _build_data(**kwargs: Any) -> dict[str, Any]:
     field_map = {
         "project_id": "projectId",
+        "column_id": "columnId",
         "start_date": "startDate",
         "due_date": "dueDate",
         "is_all_day": "isAllDay",
@@ -155,6 +156,7 @@ def _build_data(**kwargs: Any) -> dict[str, Any]:
 async def dida365_create_task(
     title: str,
     project_id: str,
+    column_id: str | None = None,
     content: str | None = None,
     desc: str | None = None,
     start_date: str | None = None,
@@ -174,6 +176,7 @@ async def dida365_create_task(
     Note: repeat_flag (RRULE) requires start_date to be set.
 
     Args:
+        column_id: Kanban column to place the task in (project must be kanban view).
         kind: TEXT (default), NOTE, or CHECKLIST. Set to CHECKLIST when passing items.
         sort_order: Display order; lower values appear first.
         items: Subtask list (for CHECKLIST kind). Each dict should contain at least
@@ -184,6 +187,7 @@ async def dida365_create_task(
         data = _build_data(
             title=title,
             project_id=project_id,
+            column_id=column_id,
             content=content,
             desc=desc,
             start_date=start_date,
@@ -260,6 +264,7 @@ async def dida365_batch_update_tasks(tasks: list[dict]) -> str:
 async def dida365_update_task(
     task_id: str,
     project_id: str,
+    column_id: str | None = None,
     title: str | None = None,
     content: str | None = None,
     desc: str | None = None,
@@ -278,6 +283,7 @@ async def dida365_update_task(
     """Update a task. Only provided fields are changed; omitted fields remain unchanged.
 
     Args:
+        column_id: Move the task to this kanban column (project must be kanban view).
         kind: TEXT, NOTE, or CHECKLIST. Set to CHECKLIST when passing items.
         sort_order: Display order; lower values appear first.
         items: Subtask list (for CHECKLIST kind). Each dict should contain at least
@@ -288,6 +294,7 @@ async def dida365_update_task(
         data = _build_data(
             task_id=task_id,
             project_id=project_id,
+            column_id=column_id,
             title=title,
             content=content,
             desc=desc,
