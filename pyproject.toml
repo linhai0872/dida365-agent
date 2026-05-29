@@ -27,9 +27,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/linhai0872/dida365-agent-mcp"
-Repository = "https://github.com/linhai0872/dida365-agent-mcp"
-"Bug Tracker" = "https://github.com/linhai0872/dida365-agent-mcp/issues"
+Homepage = "https://github.com/linhai0872/dida365-agent"
+Repository = "https://github.com/linhai0872/dida365-agent"
+"Bug Tracker" = "https://github.com/linhai0872/dida365-agent/issues"
 
 [project.scripts]
 dida365-agent = "dida365_agent.cli:app"
