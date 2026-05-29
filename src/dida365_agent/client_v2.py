@@ -59,6 +59,31 @@ async def signon(
     return data["token"]
 
 
+async def resolve_v2_token(settings: Any) -> str | None:
+    """Resolve a V2 session token: prefer the configured token, else auto-login.
+
+    Returns None when no V2 credentials are configured.
+    """
+    if settings.dida365_v2_session_token:
+        return settings.dida365_v2_session_token
+    if settings.dida365_username and settings.dida365_password:
+        try:
+            token = await signon(
+                settings.v2_api_base_url,
+                settings.dida365_username,
+                settings.dida365_password,
+            )
+            logger.info("V2 auto-login succeeded")
+            return token
+        except Exception as e:
+            logger.warning(
+                "V2 auto-login failed: %s. "
+                "If 2FA is enabled, use DIDA365_V2_SESSION_TOKEN instead.",
+                e,
+            )
+    return None
+
+
 class Dida365V2Client:
     def __init__(self, session_token: str, base_url: str) -> None:
         self._client: httpx.AsyncClient | None = None

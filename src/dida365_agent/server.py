@@ -8,7 +8,7 @@ from typing import Any
 from fastmcp import FastMCP
 
 from .client import Dida365Client
-from .client_v2 import Dida365V2Client, signon
+from .client_v2 import Dida365V2Client, resolve_v2_token
 from .config import settings
 from .server_v2 import init_v2_client, register_v2_tools
 
@@ -31,21 +31,7 @@ def _get_client() -> Dida365Client:
 async def lifespan(_app: Any):
     global _client, _v2_client
     _client = Dida365Client()
-    v2_token = settings.dida365_v2_session_token
-    if not v2_token and settings.dida365_username and settings.dida365_password:
-        try:
-            v2_token = await signon(
-                settings.v2_api_base_url,
-                settings.dida365_username,
-                settings.dida365_password,
-            )
-            logger.info("V2 auto-login succeeded")
-        except Exception as e:
-            logger.warning(
-                "V2 auto-login failed: %s. "
-                "If 2FA is enabled, use DIDA365_V2_SESSION_TOKEN instead.",
-                e,
-            )
+    v2_token = await resolve_v2_token(settings)
     if v2_token:
         _v2_client = Dida365V2Client(
             session_token=v2_token,
@@ -66,7 +52,7 @@ async def lifespan(_app: Any):
 
 
 mcp = FastMCP(
-    name="dida365-agent-mcp",
+    name="dida365-agent",
     instructions=(
         "Dida365/TickTick task management via Open API. "
         "Read the dida365://projects resource first to get project IDs and names, "
